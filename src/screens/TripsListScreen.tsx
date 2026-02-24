@@ -1,0 +1,246 @@
+﻿import React, { useMemo, useState } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { TripsStackParamList } from '../app/navigation/TripsStack';
+import { PaywallModal } from '../components/travel/PaywallModal';
+import { Card } from '../components/ui/Card';
+import { Chip } from '../components/ui/Chip';
+import { Hero } from '../components/ui/Hero';
+import { imageByKey } from '../mock/images';
+import { Trip } from '../models/trip';
+import { useAppStore } from '../state/AppStore';
+import { getStatusPillLabel, selectCanCreateTrip, selectSelectedTrip } from '../state/selectors';
+import { useTheme } from '../theme/useTheme';
+import { formatDateRange, getTripDayCount } from '../utils/date';
+
+type Props = NativeStackScreenProps<TripsStackParamList, 'TripsList'>;
+
+const travelerLabel: Record<Trip['travelersType'], string> = {
+  solo: 'Solo',
+  couple: 'Couple',
+  family: 'Family',
+  group: 'Group',
+};
+
+const paceLabel: Record<Trip['pace'], string> = {
+  relaxed: 'Relaxed',
+  balanced: 'Balanced',
+  packed: 'Packed',
+};
+
+const TripCard = ({
+  trip,
+  isCurrent,
+  onPress,
+}: {
+  trip: Trip;
+  isCurrent: boolean;
+  onPress: () => void;
+}) => {
+  const theme = useTheme();
+  const dayCount = getTripDayCount(trip.dateStart, trip.dateEnd);
+
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button">
+      <Card style={styles.tripCard}>
+        <Image
+          source={{ uri: imageByKey[trip.coverImageKey] ?? imageByKey.default }}
+          style={styles.tripImage}
+          contentFit="cover"
+          transition={150}
+        />
+
+        <View style={styles.cardContent}>
+          <View style={styles.rowBetween}>
+            <View style={styles.titleWrap}>
+              <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{trip.destination}</Text>
+              <Text style={[styles.country, { color: theme.colors.textSecondary }]}>{trip.country || 'Destination pending'}</Text>
+            </View>
+            <Chip label={getStatusPillLabel(trip.status)} selected={isCurrent} />
+          </View>
+
+          <Text style={[styles.dateText, { color: theme.colors.textSecondary }]}>{formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
+
+          <View style={styles.metaRow}>
+            <Chip label={dayCount ? `${dayCount} days` : 'Flexible dates'} />
+            <Chip label={travelerLabel[trip.travelersType]} />
+            <Chip label={paceLabel[trip.pace]} />
+          </View>
+        </View>
+      </Card>
+    </Pressable>
+  );
+};
+
+export const TripsListScreen = ({ navigation }: Props) => {
+  const { state, selectTrip, setMembershipState } = useAppStore();
+  const theme = useTheme();
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const selectedTrip = selectSelectedTrip(state);
+  const canCreateTrip = selectCanCreateTrip(state);
+
+  const heroImage = useMemo(() => {
+    if (selectedTrip) {
+      return imageByKey[selectedTrip.coverImageKey] ?? imageByKey.default;
+    }
+    return imageByKey.default;
+  }, [selectedTrip]);
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={state.trips}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        ListHeaderComponent={
+          <View style={styles.headerArea}>
+            <Hero
+              imageUri={heroImage}
+              height={252}
+              glassContent={
+                <>
+                  <Text style={styles.heroEyebrow}>TRAILO</Text>
+                  <Text style={styles.heroTitle}>Your intelligent travel guide</Text>
+                  <Text style={styles.heroSub}>Guiding you at every step</Text>
+                  <Text style={styles.heroHint}>
+                    Calm planning, practical preparation, confident exploration, and thoughtful reflection in one place.
+                  </Text>
+                </>
+              }
+            />
+            <Pressable
+              onPress={() => {
+                if (!canCreateTrip) {
+                  setShowPaywall(true);
+                  return;
+                }
+                navigation.navigate('CreateTrip');
+              }}
+              style={[styles.floatingCta, { backgroundColor: theme.colors.primary }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.floatingCtaText}>New Trip</Text>
+            </Pressable>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <TripCard
+            trip={item}
+            isCurrent={state.selectedTripId === item.id}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              selectTrip(item.id);
+              navigation.navigate('TripDetail', { tripId: item.id });
+            }}
+          />
+        )}
+      />
+
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        onEnableMembership={() => {
+          setMembershipState({
+            ...state.membershipState,
+            hasMembership: true,
+          });
+        }}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 120,
+    gap: 12,
+  },
+  headerArea: {
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  heroEyebrow: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+  },
+  heroTitle: {
+    marginTop: 4,
+    color: 'white',
+    fontSize: 32,
+    fontWeight: '700',
+    letterSpacing: -0.7,
+  },
+  heroSub: {
+    marginTop: 4,
+    color: 'rgba(255,255,255,0.95)',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  heroHint: {
+    marginTop: 8,
+    color: 'rgba(255,255,255,0.86)',
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  floatingCta: {
+    marginTop: 12,
+    alignSelf: 'flex-end',
+    borderRadius: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    shadowColor: '#092019',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 4,
+  },
+  floatingCtaText: {
+    color: '#FFF7EA',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  tripCard: {
+    padding: 0,
+    overflow: 'hidden',
+  },
+  tripImage: {
+    width: '100%',
+    height: 136,
+  },
+  cardContent: {
+    padding: 14,
+    gap: 8,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  titleWrap: {
+    flexShrink: 1,
+  },
+  country: {
+    fontSize: 14,
+    marginTop: 2,
+  },
+  dateText: {
+    fontSize: 14,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    gap: 8,
+    flexWrap: 'wrap',
+  },
+});
+
