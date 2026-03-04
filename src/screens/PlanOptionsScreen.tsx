@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -184,21 +184,20 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Hero
-          imageUri={imageByKey[trip.coverImageKey] ?? imageByKey.default}
-          height={266}
+          imageSource={imageByKey[trip.coverImageKey] ?? imageByKey.default}
           glassContent={
             <View>
-              <Text style={styles.heroTag}>Curated intelligence</Text>
-              <Text style={styles.heroTitle}>{trip.destination}</Text>
-              <Text style={styles.heroMeta}>{formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
-              <Text style={styles.heroHint}>Based on your pace and interests.</Text>
+              <Text style={[theme.typography.heroEyebrow, styles.heroTag, { color: theme.colors.onImageSecondary }]}>Curated intelligence</Text>
+              <Text style={[theme.typography.heroTitle, styles.heroTitle, { color: theme.colors.onImagePrimary }]}>{trip.destination}</Text>
+              <Text style={[theme.typography.heroSub, styles.heroMeta, { color: theme.colors.onImageSecondary }]}>{formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
+              <Text style={[theme.typography.heroEyebrow, styles.heroHint, { color: theme.colors.onImageTertiary }]}>Based on your pace and interests.</Text>
             </View>
           }
         />
 
         <View style={styles.titleWrap}>
           <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Choose your plan</Text>
-          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>High-level day-by-day guidance. You can refine anytime.</Text>
+          <Text style={[styles.subtitle, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>High-level day-by-day guidance. You can refine anytime.</Text>
           <Button label="Refine" variant="secondary" onPress={() => setShowRefine(true)} style={styles.refineButton} />
         </View>
 
@@ -206,9 +205,9 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
           <View style={styles.skeletonWrap}>
             <ActivityIndicator color={theme.colors.primary} />
             {[1, 2, 3].map((item) => (
-              <View key={item} style={[styles.skeletonCard, { backgroundColor: theme.colors.surfaceMuted }]} />
+              <View key={item} style={[styles.skeletonCard, { backgroundColor: theme.colors.surfaceMuted, borderRadius: theme.spacing.lg }]} />
             ))}
-            <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}>
+            <Text style={[styles.loadingText, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}>
               {isApplying ? 'Regenerating...' : 'Curating options...'}
             </Text>
           </View>
@@ -247,7 +246,7 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
             },
           ]}
         >
-          <Text style={[styles.stickyLabel, { color: theme.colors.textSecondary }]}>Selected: {selectedOption.title}</Text>
+          <Text style={[styles.stickyLabel, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}>Selected: {selectedOption.title}</Text>
           <Button
             label="Select plan"
             onPress={() => {
@@ -262,10 +261,10 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
         <View style={styles.sheetRoot}>
           <Pressable style={styles.sheetBackdrop} onPress={() => setShowRefine(false)} />
           <Animated.View style={[styles.sheetWrap, sheetStyle]}>
-            <BlurView intensity={40} tint="light" style={[styles.sheet, { borderColor: theme.colors.cardBorder }]}>
+            <BlurView intensity={40} tint="light" style={[styles.sheet, { borderColor: theme.colors.cardBorder, borderRadius: theme.spacing.xl }]}>
               <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>Refine plan style</Text>
 
-              <Text style={[styles.sheetLabel, { color: theme.colors.textPrimary }]}>Pace</Text>
+              <Text style={[styles.sheetLabel, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Pace</Text>
               <View style={styles.inlineRow}>
                 {(['relaxed', 'balanced', 'packed'] as TravelPace[]).map((pace) => (
                   <Button
@@ -280,7 +279,7 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
 
               <View style={[styles.separator, { backgroundColor: theme.colors.cardBorder }]} />
 
-              <Text style={[styles.sheetLabel, { color: theme.colors.textPrimary }]}>Budget</Text>
+              <Text style={[styles.sheetLabel, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Budget</Text>
               <View style={styles.inlineRow}>
                 {(['value', 'comfort', 'premium'] as PlanBudget[]).map((budget) => (
                   <Button
@@ -295,7 +294,7 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
 
               <View style={[styles.separator, { backgroundColor: theme.colors.cardBorder }]} />
 
-              <Text style={[styles.sheetLabel, { color: theme.colors.textPrimary }]}>Interests</Text>
+              <Text style={[styles.sheetLabel, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Interests</Text>
               <View style={styles.interestWrap}>
                 {interestOptions.map((interest) => (
                   <Chip
@@ -335,33 +334,20 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   heroTag: {
-    color: 'rgba(255,255,255,0.92)',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.4,
   },
   heroTitle: {
-    color: 'white',
-    fontSize: 28,
-    fontWeight: '700',
     marginTop: 4,
   },
   heroMeta: {
-    color: 'rgba(255,255,255,0.94)',
     marginTop: 2,
-    fontSize: 13,
   },
   heroHint: {
-    color: 'rgba(255,255,255,0.85)',
     marginTop: 8,
-    fontSize: 12,
   },
   titleWrap: {
     gap: 6,
   },
   subtitle: {
-    fontSize: 14,
-    lineHeight: 20,
   },
   refineButton: {
     alignSelf: 'flex-start',
@@ -381,8 +367,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   stickyLabel: {
-    fontSize: 13,
-    fontWeight: '600',
   },
   skeletonWrap: {
     gap: 10,
@@ -392,11 +376,9 @@ const styles = StyleSheet.create({
   skeletonCard: {
     width: '100%',
     height: 130,
-    borderRadius: 20,
   },
   loadingText: {
     marginTop: 4,
-    fontSize: 13,
   },
   sheetRoot: {
     flex: 1,
@@ -411,15 +393,12 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   sheet: {
-    borderRadius: 24,
     padding: 16,
     gap: 10,
     borderWidth: 1,
     overflow: 'hidden',
   },
   sheetLabel: {
-    fontSize: 13,
-    fontWeight: '700',
     marginTop: 4,
   },
   inlineRow: {
@@ -444,3 +423,4 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
+

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripsStackParamList } from '../app/navigation/TripsStack';
@@ -60,11 +60,10 @@ export const TripDetailScreen = ({ route, navigation }: Props) => {
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <Hero
-        imageUri={imageByKey[trip.coverImageKey] ?? imageByKey.default}
+        imageSource={imageByKey[trip.coverImageKey] ?? imageByKey.default}
         title={`${trip.destination}, ${trip.country || 'Destination'}`}
         subtitle={formatDateRange(trip.dateStart, trip.dateEnd)}
         helperText={nextStepByStatus[trip.status]}
-        height={264}
       />
 
       <Card>
@@ -72,7 +71,7 @@ export const TripDetailScreen = ({ route, navigation }: Props) => {
           <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>Mode Hub</Text>
           <Chip label={getStatusPillLabel(trip.status)} selected />
         </View>
-        <Text style={[styles.nextStep, { color: theme.colors.textSecondary }]}>{nextStepByStatus[trip.status]}</Text>
+        <Text style={[styles.nextStep, theme.typography.button, { color: theme.colors.textSecondary }]}>{nextStepByStatus[trip.status]}</Text>
 
         <View style={styles.primaryArea}>
           <Button label={primaryLabelByStatus[trip.status]} onPress={openPrimaryAction} />
@@ -94,7 +93,7 @@ export const TripDetailScreen = ({ route, navigation }: Props) => {
           />
         </View>
 
-        <Text onPress={() => advanceTripStatus(trip.id)} style={[styles.advanceDebug, { color: theme.colors.textSecondary }]}>
+        <Text onPress={() => advanceTripStatus(trip.id)} style={[styles.advanceDebug, theme.typography.overline, { color: theme.colors.textSecondary }]}>
           Advance Status (debug)
         </Text>
       </Card>
@@ -120,7 +119,6 @@ const styles = StyleSheet.create({
   },
   nextStep: {
     marginTop: 10,
-    fontSize: 15,
     lineHeight: 22,
   },
   primaryArea: {
@@ -137,7 +135,5 @@ const styles = StyleSheet.create({
   },
   advanceDebug: {
     marginTop: 14,
-    fontSize: 11,
-    fontWeight: '600',
   },
 });

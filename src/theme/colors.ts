@@ -17,6 +17,10 @@ export interface ThemeColors {
   tabBar: string;
   focusRing: string;
   danger: string;
+  onPrimary: string;
+  onImagePrimary: string;
+  onImageSecondary: string;
+  onImageTertiary: string;
 }
 
 export const baseColors: ThemeColors = {
@@ -36,6 +40,10 @@ export const baseColors: ThemeColors = {
   tabBar: '#FBF6EE',
   focusRing: '#1F5F5066',
   danger: '#B84B4B',
+  onPrimary: '#FFF7EA',
+  onImagePrimary: '#FFFFFF',
+  onImageSecondary: 'rgba(255,255,255,0.95)',
+  onImageTertiary: 'rgba(255,255,255,0.86)',
 };
 
 export const statusTitleByMode: Record<TripStatus, string> = {

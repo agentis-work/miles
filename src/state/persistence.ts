@@ -2,15 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SeedData } from '../mock/seed';
 
 const STORAGE_KEYS = {
-  trips: 'navi.trips',
-  selectedTripId: 'navi.selectedTripId',
-  membershipState: 'navi.membershipState',
-  bookings: 'navi.bookings',
-  memories: 'navi.memories',
-  exploreSuggestions: 'navi.exploreSuggestions',
-  eventsByTripId: 'navi.eventsByTripId',
-  recapsByTripId: 'navi.recapsByTripId',
-  legacyTraveloguesByTripId: 'navi.traveloguesByTripId',
+  trips: 'miles.trips',
+  selectedTripId: 'miles.selectedTripId',
+  membershipState: 'miles.membershipState',
+  bookings: 'miles.bookings',
+  memories: 'miles.memories',
+  exploreSuggestions: 'miles.exploreSuggestions',
+  eventsByTripId: 'miles.eventsByTripId',
+  recapsByTripId: 'miles.recapsByTripId',
+  legacyTraveloguesByTripId: 'miles.traveloguesByTripId',
 };
 
 export interface PersistedState {

@@ -62,7 +62,7 @@ const Segmented = <T extends string>({
   const theme = useTheme();
 
   return (
-    <View style={[styles.segment, { backgroundColor: theme.colors.surfaceMuted }]}> 
+    <View style={[styles.segment, { backgroundColor: theme.colors.surfaceMuted, borderRadius: theme.spacing.md }]}> 
       {options.map((option) => {
         const active = option.value === value;
         return (
@@ -151,59 +151,59 @@ export const CreateTripScreen = ({ navigation, route }: Props) => {
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <Card>
             <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Create a new trip</Text>
-            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Set up your next itinerary with Trailo.</Text>
+            <Text style={[styles.subtitle, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>Set up your next itinerary with Miles.</Text>
 
-            <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Destination</Text>
+            <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Destination</Text>
             <TextInput
               value={destination}
               onChangeText={setDestination}
               placeholder="e.g. Kyoto"
               placeholderTextColor={theme.colors.textSecondary}
-              style={[styles.input, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary }]}
+              style={[styles.input, theme.typography.button, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary, borderRadius: theme.spacing.md }]}
             />
 
-            <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Country (optional)</Text>
+            <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Country (optional)</Text>
             <TextInput
               value={country}
               onChangeText={setCountry}
               placeholder="e.g. Japan"
               placeholderTextColor={theme.colors.textSecondary}
-              style={[styles.input, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary }]}
+              style={[styles.input, theme.typography.button, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary, borderRadius: theme.spacing.md }]}
             />
 
             <View style={styles.rowInputs}>
               <View style={styles.flexInput}>
-                <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Start</Text>
+                <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Start</Text>
                 <TextInput
                   value={dateStart}
                   onChangeText={setDateStart}
                   placeholder="YYYY-MM-DD"
                   autoCapitalize="none"
                   placeholderTextColor={theme.colors.textSecondary}
-                  style={[styles.input, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary }]}
+                  style={[styles.input, theme.typography.button, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary, borderRadius: theme.spacing.md }]}
                 />
               </View>
 
               <View style={styles.flexInput}>
-                <Text style={[styles.label, { color: theme.colors.textPrimary }]}>End</Text>
+                <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>End</Text>
                 <TextInput
                   value={dateEnd}
                   onChangeText={setDateEnd}
                   placeholder="YYYY-MM-DD"
                   autoCapitalize="none"
                   placeholderTextColor={theme.colors.textSecondary}
-                  style={[styles.input, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary }]}
+                  style={[styles.input, theme.typography.button, { borderColor: theme.colors.cardBorder, color: theme.colors.textPrimary, borderRadius: theme.spacing.md }]}
                 />
               </View>
             </View>
 
-            <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Travelers</Text>
+            <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Travelers</Text>
             <Segmented value={travelersType} options={travelersOptions} onChange={setTravelersType} />
 
-            <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Pace</Text>
+            <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Pace</Text>
             <Segmented value={pace} options={paceOptions} onChange={setPace} />
 
-            <Text style={[styles.label, { color: theme.colors.textPrimary }]}>Interests</Text>
+            <Text style={[styles.label, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>Interests</Text>
             <View style={styles.interestsWrap}>
               {interestOptions.map((interest) => {
                 const selected = interests.includes(interest);
@@ -211,7 +211,7 @@ export const CreateTripScreen = ({ navigation, route }: Props) => {
               })}
             </View>
 
-            {validationError ? <Text style={[styles.error, { color: theme.colors.danger }]}>{validationError}</Text> : null}
+            {validationError ? <Text style={[styles.error, theme.typography.bodyStrongSmall, { color: theme.colors.danger }]}>{validationError}</Text> : null}
           </Card>
         </ScrollView>
 
@@ -245,20 +245,15 @@ const styles = StyleSheet.create({
   subtitle: {
     marginTop: 6,
     marginBottom: 14,
-    fontSize: 14,
   },
   label: {
     marginTop: 12,
     marginBottom: 6,
-    fontSize: 14,
-    fontWeight: '600',
   },
   input: {
     borderWidth: 1,
-    borderRadius: 16,
     paddingHorizontal: 13,
     paddingVertical: 12,
-    fontSize: 15,
   },
   rowInputs: {
     flexDirection: 'row',
@@ -268,7 +263,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   segment: {
-    borderRadius: 16,
     padding: 6,
     flexDirection: 'row',
     gap: 6,
@@ -285,8 +279,6 @@ const styles = StyleSheet.create({
   },
   error: {
     marginTop: 14,
-    fontSize: 13,
-    fontWeight: '500',
   },
   stickyBar: {
     position: 'absolute',

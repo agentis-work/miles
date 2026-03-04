@@ -1,41 +1,53 @@
-import React, { ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { ReactNode, useMemo, useState } from 'react';
+import { ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
+import BrandMark from '../brand/BrandMark';
 import { useTheme } from '../../theme/useTheme';
+import { fallbackCoverImage } from '../../assets/coverImages';
 
 interface HeroProps {
-  imageUri: string;
+  imageSource: ImageSourcePropType;
   title?: string;
   subtitle?: string;
   helperText?: string;
-  height?: number;
   glow?: boolean;
   glassContent?: ReactNode;
 }
 
-export const Hero = ({ imageUri, title, subtitle, helperText, height = 240, glow = true, glassContent }: HeroProps) => {
+export const Hero = ({ imageSource, title, subtitle, helperText, glow = true, glassContent }: HeroProps) => {
   const theme = useTheme();
+  const [failed, setFailed] = useState(false);
+  const resolvedSource = useMemo(() => (failed ? fallbackCoverImage : imageSource), [failed, imageSource]);
 
   return (
-    <View style={[styles.container, { height }, theme.shadows.elevated]}>
-      <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" transition={150} />
+    <View style={[styles.container, { height: theme.spacing.heroHeight, borderRadius: theme.spacing.xl }, theme.shadows.elevated]}>
+      <Image source={resolvedSource} style={styles.image} contentFit="cover" transition={150} onError={() => setFailed(true)} />
       {glow ? (
         <>
-          <View style={[styles.glowPrimary, { backgroundColor: `${theme.colors.primary}20` }]} />
-          <View style={[styles.glowAccent, { backgroundColor: `${theme.colors.accent}1E` }]} />
+          <View style={[styles.glowPrimary, { backgroundColor: `${theme.colors.primary}20`, borderRadius: theme.radii.pill }]} />
+          <View style={[styles.glowAccent, { backgroundColor: `${theme.colors.accent}1E`, borderRadius: theme.radii.pill }]} />
         </>
       ) : null}
-      <LinearGradient colors={['transparent', 'rgba(0,0,0,0.6)']} style={styles.overlay} />
-      <BlurView intensity={22} tint="light" style={styles.glass}>
+      <LinearGradient colors={[`${theme.colors.primaryStrong}00`, `${theme.colors.primaryStrong}CC`]} style={styles.overlay} />
+      <View style={[styles.brandTop, { top: theme.spacing.s14, left: theme.spacing.s14 }]} pointerEvents="none">
+        <View style={styles.brandGhost}>
+          <BrandMark size="sm" variant="full" tone="light" />
+        </View>
+      </View>
+      <BlurView
+        intensity={22}
+        tint="light"
+        style={[styles.glass, { left: theme.spacing.md, right: theme.spacing.md, bottom: theme.spacing.md, borderRadius: theme.spacing.md, padding: theme.spacing.s14 }]}
+      >
         {glassContent ? (
           glassContent
         ) : (
           <>
-            {title ? <Text style={[styles.title, theme.typography.h1]}>{title}</Text> : null}
-            {subtitle ? <Text style={[styles.subtitle, theme.typography.bodyStrong]}>{subtitle}</Text> : null}
-            {helperText ? <Text style={[styles.helper, theme.typography.caption]}>{helperText}</Text> : null}
+            {title ? <Text style={[styles.title, theme.typography.heroTitle, { color: theme.colors.onImagePrimary }]}>{title}</Text> : null}
+            {subtitle ? <Text style={[styles.subtitle, theme.typography.heroSub, { color: theme.colors.onImageSecondary }]}>{subtitle}</Text> : null}
+            {helperText ? <Text style={[styles.helper, theme.typography.heroEyebrow, { color: theme.colors.onImageTertiary }]}>{helperText}</Text> : null}
           </>
         )}
       </BlurView>
@@ -46,7 +58,6 @@ export const Hero = ({ imageUri, title, subtitle, helperText, height = 240, glow
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 24,
     overflow: 'hidden',
     position: 'relative',
   },
@@ -54,7 +65,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 280,
     height: 280,
-    borderRadius: 140,
     top: -120,
     left: -60,
     zIndex: 0,
@@ -63,7 +73,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 220,
     height: 220,
-    borderRadius: 110,
     bottom: -120,
     right: -30,
     zIndex: 0,
@@ -76,24 +85,22 @@ const styles = StyleSheet.create({
   },
   glass: {
     position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 16,
-    borderRadius: 16,
     overflow: 'hidden',
-    padding: 14,
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
+  brandTop: {
+    position: 'absolute',
+  },
+  brandGhost: {
+    opacity: 0.68,
+  },
   title: {
-    color: 'white',
   },
   subtitle: {
     marginTop: 4,
-    color: 'rgba(255,255,255,0.95)',
   },
   helper: {
     marginTop: 8,
-    color: 'rgba(255,255,255,0.85)',
   },
   modeTint: {
     ...StyleSheet.absoluteFillObject,

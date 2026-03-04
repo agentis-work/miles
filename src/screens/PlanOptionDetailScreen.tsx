@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -68,16 +68,15 @@ export const PlanOptionDetailScreen = ({ route, navigation }: Props) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Hero
-          imageUri={imageByKey[trip.coverImageKey] ?? imageByKey.default}
+          imageSource={imageByKey[trip.coverImageKey] ?? imageByKey.default}
           title={option.title}
           subtitle={formatDateRange(trip.dateStart, trip.dateEnd)}
           helperText={option.summary}
-          height={232}
         />
 
         <Card>
           <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{option.title}</Text>
-          <Text style={[styles.optionSummary, { color: theme.colors.textSecondary }]}>{option.summary}</Text>
+          <Text style={[styles.optionSummary, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>{option.summary}</Text>
 
           <View style={styles.tabsRow}>
             <TabButton label="Itinerary" active={activeTab === 'itinerary'} onPress={() => setActiveTab('itinerary')} />
@@ -89,30 +88,30 @@ export const PlanOptionDetailScreen = ({ route, navigation }: Props) => {
         {activeTab === 'itinerary' ? (
           <View style={styles.sectionWrap}>
             {option.itinerary.map((day) => (
-              <DayCard key={day.dayNumber} day={day} imageUri={imageByKey[trip.coverImageKey] ?? imageByKey.default} />
+              <DayCard key={day.dayNumber} day={day} imageSource={imageByKey[trip.coverImageKey] ?? imageByKey.default} />
             ))}
           </View>
         ) : null}
 
         {activeTab === 'included' ? (
           <Card>
-            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Inclusions</Text>
+            <Text style={[styles.sectionTitle, theme.typography.button, { color: theme.colors.textPrimary }]}>Inclusions</Text>
             {(option.included?.inclusions ?? ['Day-by-day guidance', 'Priority recommendation map']).map((item) => (
-              <Text key={item} style={[styles.line, { color: theme.colors.textSecondary }]}>- {item}</Text>
+              <Text key={item} style={[styles.line, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- {item}</Text>
             ))}
 
-            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary, marginTop: 12 }]}>Exclusions</Text>
+            <Text style={[styles.sectionTitle, theme.typography.button, { color: theme.colors.textPrimary, marginTop: 12 }]}>Exclusions</Text>
             {(option.included?.exclusions ?? ['Flights and hotels are not auto-booked']).map((item) => (
-              <Text key={item} style={[styles.line, { color: theme.colors.textSecondary }]}>- {item}</Text>
+              <Text key={item} style={[styles.line, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- {item}</Text>
             ))}
           </Card>
         ) : null}
 
         {activeTab === 'notes' ? (
           <Card>
-            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Practical notes</Text>
+            <Text style={[styles.sectionTitle, theme.typography.button, { color: theme.colors.textPrimary }]}>Practical notes</Text>
             {(option.notes ?? ['You can refine this plan anytime before booking.', 'The itinerary adapts to your selected pace.']).map((item) => (
-              <Text key={item} style={[styles.line, { color: theme.colors.textSecondary }]}>- {item}</Text>
+              <Text key={item} style={[styles.line, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- {item}</Text>
             ))}
           </Card>
         ) : null}
@@ -150,8 +149,6 @@ const styles = StyleSheet.create({
   },
   optionSummary: {
     marginTop: 6,
-    fontSize: 14,
-    lineHeight: 20,
   },
   tabsRow: {
     flexDirection: 'row',
@@ -163,13 +160,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
   },
   line: {
     marginTop: 6,
-    fontSize: 14,
-    lineHeight: 20,
   },
   sticky: {
     position: 'absolute',

@@ -12,13 +12,13 @@ export const SectionHeader = ({ title, actionLabel, onActionPress }: SectionHead
   const theme = useTheme();
 
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, { marginBottom: theme.spacing.s10 }]}>
       <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]} accessibilityRole="header">
         {title}
       </Text>
       {actionLabel ? (
         <Pressable onPress={onActionPress} accessibilityRole="button">
-          <Text style={[styles.action, { color: theme.colors.primary }]}>{actionLabel}</Text>
+          <Text style={[styles.action, theme.typography.bodySmall, { color: theme.colors.primary }]}>{actionLabel}</Text>
         </Pressable>
       ) : null}
     </View>
@@ -30,10 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
   },
   action: {
-    fontSize: 14,
     fontWeight: '600',
   },
 });

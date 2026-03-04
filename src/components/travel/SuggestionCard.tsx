@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ExploreSuggestion } from '../../models/explore';
@@ -19,11 +19,11 @@ export const SuggestionCard = ({ suggestion, onGuide, onSave, onSwap }: Suggesti
 
   return (
     <Card style={styles.card}>
-      <Image source={{ uri: imageByKey[suggestion.imageKey] ?? imageByKey.default }} style={styles.image} contentFit="cover" transition={120} />
+      <Image source={imageByKey[suggestion.imageKey] ?? imageByKey.default} style={styles.image} contentFit="cover" transition={120} />
       <View style={styles.content}>
         <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{suggestion.title}</Text>
-        <Text style={[styles.distance, { color: theme.colors.textSecondary }]}>{suggestion.distanceLabel}</Text>
-        <Text style={[styles.reason, { color: theme.colors.textSecondary }]}>Why now: {suggestion.reason}</Text>
+        <Text style={[styles.distance, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}>{suggestion.distanceLabel}</Text>
+        <Text style={[styles.reason, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>Why now: {suggestion.reason}</Text>
 
         <View style={styles.actions}>
           <Button label="Guide me" onPress={onGuide} style={styles.primary} />
@@ -48,13 +48,9 @@ const styles = StyleSheet.create({
     padding: 14,
     gap: 6,
   },
-  distance: {
-    fontSize: 13,
-    fontWeight: '600',
+  distance: {    fontWeight: '600',
   },
-  reason: {
-    fontSize: 14,
-    lineHeight: 20,
+  reason: {    lineHeight: 20,
   },
   actions: {
     marginTop: 6,
@@ -69,3 +65,4 @@ const styles = StyleSheet.create({
     minWidth: 92,
   },
 });
+

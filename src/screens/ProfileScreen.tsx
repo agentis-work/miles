@@ -15,7 +15,7 @@ export const ProfileScreen = () => {
       <Card>
         <SectionHeader title="Membership (Mock)" />
         <Text style={[theme.typography.body, { color: theme.colors.textSecondary }]}>Status: {state.membershipState.hasMembership ? 'Member' : 'Free tier'}</Text>
-        <Text style={[styles.subtle, { color: theme.colors.textSecondary }]}>User-created trips: {state.membershipState.userCreatedTripCount}</Text>
+        <Text style={[styles.subtle, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}>User-created trips: {state.membershipState.userCreatedTripCount}</Text>
         <View style={styles.row}>
           <Button
             label={state.membershipState.hasMembership ? 'Disable Membership' : 'Enable Membership'}
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   },
   subtle: {
     marginTop: 6,
-    fontSize: 13,
   },
   row: {
     marginTop: 12,

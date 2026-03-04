@@ -27,9 +27,9 @@ export const ShareRecapModal = ({ visible, recap, onClose }: ShareRecapModalProp
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.root}>
+      <View style={[styles.root, { padding: theme.spacing.lg }]}>
         <Pressable style={styles.backdrop} onPress={onClose} />
-        <BlurView intensity={40} tint="light" style={[styles.card, { borderColor: theme.colors.cardBorder }]}>
+        <BlurView intensity={40} tint="light" style={[styles.card, { borderColor: theme.colors.cardBorder, borderRadius: theme.spacing.xl, padding: theme.spacing.md, gap: theme.spacing.sm }]}>
           <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>Share recap</Text>
 
           <View style={styles.tabs}>
@@ -44,7 +44,7 @@ export const ShareRecapModal = ({ visible, recap, onClose }: ShareRecapModalProp
             ))}
           </View>
 
-          <Text style={[styles.story, { color: theme.colors.textSecondary }]}>{recap.story[variant]}</Text>
+          <Text style={[styles.story, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>{recap.story[variant]}</Text>
 
           <View style={styles.actions}>
             <Button label="Share" onPress={onShare} />
@@ -60,17 +60,13 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(12,12,12,0.35)',
   },
   card: {
-    borderRadius: 24,
     borderWidth: 1,
-    padding: 16,
-    gap: 12,
     overflow: 'hidden',
   },
   tabs: {
@@ -81,8 +77,6 @@ const styles = StyleSheet.create({
     minWidth: 88,
   },
   story: {
-    fontSize: 14,
-    lineHeight: 20,
   },
   actions: {
     gap: 8,

@@ -18,10 +18,13 @@ export const Chip = ({ label, selected = false, onPress }: ChipProps) => {
         {
           backgroundColor: selected ? theme.colors.primary : theme.colors.surfaceMuted,
           borderColor: selected ? theme.colors.primary : isFocused ? theme.colors.focusRing : 'transparent',
+          borderRadius: theme.spacing.sm,
+          paddingHorizontal: theme.spacing.s10 + 1,
+          paddingVertical: theme.spacing.xs - 2,
         },
       ]}
     >
-      <Text style={[styles.label, { color: selected ? '#FDF8EE' : theme.colors.textSecondary }]}>{label}</Text>
+      <Text style={[styles.label, theme.typography.caption, { color: selected ? theme.colors.onPrimary : theme.colors.textSecondary }]}>{label}</Text>
     </View>
   );
 
@@ -44,14 +47,9 @@ export const Chip = ({ label, selected = false, onPress }: ChipProps) => {
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'flex-start',
-    borderRadius: 12,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
     borderWidth: 1,
   },
   label: {
-    fontSize: 12,
-    fontWeight: '600',
     letterSpacing: 0.1,
   },
 });

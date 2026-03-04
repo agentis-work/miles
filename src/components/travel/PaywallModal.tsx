@@ -54,18 +54,22 @@ export const PaywallModal = ({ visible, onClose, onEnableMembership }: PaywallMo
 
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
-      <View style={styles.root}>
+      <View style={[styles.root, { padding: theme.spacing.lg }]}>
         <Pressable style={styles.backdrop} onPress={onClose} />
         <Animated.View style={[styles.modalWrap, cardStyle]}>
-          <BlurView intensity={42} tint="light" style={[styles.card, { borderColor: `${theme.colors.accent}55` }]}>
-            <View style={[styles.dot, { backgroundColor: theme.colors.accent }]} />
+          <BlurView
+            intensity={42}
+            tint="light"
+            style={[styles.card, { borderColor: `${theme.colors.accent}55`, borderRadius: theme.spacing.xl, padding: theme.spacing.lg, gap: theme.spacing.s10 }]}
+          >
+            <View style={[styles.dot, { backgroundColor: theme.colors.accent, borderRadius: theme.spacing.xxs }]} />
             <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Unlock unlimited trips</Text>
-            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Trailo membership removes the one-trip limit.</Text>
+            <Text style={[styles.subtitle, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>Miles membership removes the one-trip limit.</Text>
 
             <View style={styles.bullets}>
-              <Text style={[styles.bullet, { color: theme.colors.textSecondary }]}>- Unlimited trip creation</Text>
-              <Text style={[styles.bullet, { color: theme.colors.textSecondary }]}>- Priority concierge suggestions</Text>
-              <Text style={[styles.bullet, { color: theme.colors.textSecondary }]}>- Deeper planning automation</Text>
+              <Text style={[styles.bullet, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- Unlimited trip creation</Text>
+              <Text style={[styles.bullet, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- Priority concierge suggestions</Text>
+              <Text style={[styles.bullet, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>- Deeper planning automation</Text>
             </View>
 
             <View style={styles.actions}>
@@ -83,7 +87,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
@@ -94,27 +97,20 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    borderRadius: 24,
-    padding: 20,
-    gap: 10,
     borderWidth: 1,
     overflow: 'hidden',
   },
   dot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
   },
   subtitle: {
-    fontSize: 14,
-    lineHeight: 20,
   },
   bullets: {
     gap: 6,
     marginTop: 6,
   },
   bullet: {
-    fontSize: 14,
   },
   actions: {
     gap: 10,

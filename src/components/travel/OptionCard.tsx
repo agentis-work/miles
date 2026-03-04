@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { PlanOption } from '../../models/plan';
 import { useTheme } from '../../theme/useTheme';
@@ -31,7 +31,7 @@ export const OptionCard = ({ option, selected = false, onPress, onReview }: Opti
         ]}
       >
         <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{option.title}</Text>
-        <Text numberOfLines={2} style={[styles.summary, { color: theme.colors.textSecondary }]}> 
+        <Text numberOfLines={2} style={[styles.summary, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}> 
           {option.summary}
         </Text>
 
@@ -43,8 +43,8 @@ export const OptionCard = ({ option, selected = false, onPress, onReview }: Opti
 
         <View style={styles.highlightsWrap}>
           {option.highlights.slice(0, 4).map((item) => (
-            <Text key={item} style={[styles.highlight, { color: theme.colors.textSecondary }]}> 
-              • {item}
+            <Text key={item} style={[styles.highlight, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}> 
+              - {item}
             </Text>
           ))}
         </View>
@@ -59,9 +59,7 @@ const styles = StyleSheet.create({
   card: {
     gap: 10,
   },
-  summary: {
-    fontSize: 14,
-    lineHeight: 20,
+  summary: {    lineHeight: 20,
   },
   chipsRow: {
     flexDirection: 'row',
@@ -71,8 +69,7 @@ const styles = StyleSheet.create({
   highlightsWrap: {
     gap: 5,
   },
-  highlight: {
-    fontSize: 13,
-    lineHeight: 18,
+  highlight: {    lineHeight: 18,
   },
 });
+

@@ -31,6 +31,8 @@ export const Button = ({ label, onPress, variant = 'primary', style, disabled = 
         {
           backgroundColor: isPrimary ? theme.colors.primary : 'transparent',
           borderColor: isPrimary ? theme.colors.primary : theme.colors.cardBorder,
+          borderRadius: theme.spacing.md,
+          paddingHorizontal: theme.spacing.s18,
           borderWidth: isFocused ? 2 : 1,
           shadowOpacity: isPrimary && !disabled ? (pressed ? 0.05 : 0.12) : 0,
           opacity: disabled ? 0.45 : pressed ? 0.85 : 1,
@@ -47,7 +49,7 @@ export const Button = ({ label, onPress, variant = 'primary', style, disabled = 
         style,
       ]}
     >
-      <Text style={[styles.label, { color: isPrimary ? '#FDF8EE' : theme.colors.textPrimary }]}>{label}</Text>
+      <Text style={[styles.label, theme.typography.button, { color: isPrimary ? theme.colors.onPrimary : theme.colors.textPrimary }]}>{label}</Text>
     </Pressable>
   );
 };
@@ -55,17 +57,13 @@ export const Button = ({ label, onPress, variant = 'primary', style, disabled = 
 const styles = StyleSheet.create({
   button: {
     minHeight: 50,
-    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 18,
   },
   secondary: {
     borderWidth: 1,
   },
   label: {
-    fontSize: 15,
-    fontWeight: '600',
     letterSpacing: 0.15,
   },
 });

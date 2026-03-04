@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Hero } from '../components/ui/Hero';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -46,10 +46,9 @@ export const ReflectScreen = () => {
     <View style={styles.flex}>
       <ScrollView contentContainerStyle={styles.content}>
         <Hero
-          imageUri={imageByKey[trip.coverImageKey] ?? imageByKey.default}
-          height={232}
+          imageSource={imageByKey[trip.coverImageKey] ?? imageByKey.default}
           title="Reflect"
-          subtitle={`${trip.destination} � ${formatDateRange(trip.dateStart, trip.dateEnd)}`}
+          subtitle={`${trip.destination} • ${formatDateRange(trip.dateStart, trip.dateEnd)}`}
           helperText="Your recap and moments"
         />
 
@@ -58,11 +57,11 @@ export const ReflectScreen = () => {
           {refreshing ? (
             <View style={styles.loadingRow}>
               <ActivityIndicator color={theme.colors.primary} />
-              <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}>Refreshing recap...</Text>
+              <Text style={[styles.loadingText, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}>Refreshing recap...</Text>
             </View>
           ) : recap ? (
             <>
-              <Text style={[styles.summary, { color: theme.colors.textSecondary }]}>{recap.summary}</Text>
+              <Text style={[styles.summary, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>{recap.summary}</Text>
               <View style={styles.highlightWrap}>
                 {recap.highlights.map((item) => (
                   <Chip key={item} label={item} />
@@ -75,7 +74,7 @@ export const ReflectScreen = () => {
             </>
           ) : (
             <View style={styles.recapActions}>
-              <Text style={[styles.summary, { color: theme.colors.textSecondary }]}>No recap available yet for this completed trip.</Text>
+              <Text style={[styles.summary, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>No recap available yet for this completed trip.</Text>
               <Button label="Create recap" onPress={() => generateRecap(trip.id)} />
             </View>
           )}
@@ -109,8 +108,6 @@ const styles = StyleSheet.create({
   },
   summary: {
     marginTop: 8,
-    fontSize: 14,
-    lineHeight: 20,
   },
   highlightWrap: {
     marginTop: 12,
@@ -133,6 +130,5 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   loadingText: {
-    fontSize: 13,
   },
 });

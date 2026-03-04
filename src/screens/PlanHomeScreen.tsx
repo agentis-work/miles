@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import MilesLogo from '../components/brand/MilesLogo';
 import { Hero } from '../components/ui/Hero';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -17,13 +18,13 @@ export const PlanHomeScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <Hero
-        imageUri={imageByKey.default}
-        height={248}
+        imageSource={imageByKey.default}
         glassContent={
           <>
-            <Text style={styles.tag}>TRAILO</Text>
-            <Text style={styles.title}>Your intelligent travel guide</Text>
-            <Text style={styles.subtitle}>Plan your next trip with calm, high-level guidance tailored to your pace and priorities.</Text>
+            <View style={styles.logoWrap}>
+              <MilesLogo variant="full" width={120} accessibilityLabel="Miles" />
+            </View>
+            <Text style={[theme.typography.heroSub, styles.subtitle, { color: theme.colors.onImageSecondary }]}>Your AI travel guide. Plan your next trip with calm, high-level guidance tailored to your pace and priorities.</Text>
           </>
         }
       />
@@ -47,12 +48,12 @@ export const PlanHomeScreen = () => {
             {sampleDestinations.map((item) => (
               <Pressable
                 key={item}
-                style={[styles.exampleChip, { borderColor: theme.colors.cardBorder, backgroundColor: theme.colors.surfaceMuted }]}
+                style={[styles.exampleChip, { borderColor: theme.colors.cardBorder, backgroundColor: theme.colors.surfaceMuted, borderRadius: theme.spacing.sm }]}
                 onPress={() => {
                   (navigation as any).navigate('TripsTab', { screen: 'CreateTrip', params: { destinationPrefill: item } });
                 }}
               >
-                <Text style={[styles.exampleText, { color: theme.colors.textPrimary }]}>{item}</Text>
+                <Text style={[styles.exampleText, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>{item}</Text>
               </Pressable>
             ))}
           </View>
@@ -67,24 +68,11 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  tag: {
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-  },
-  title: {
+  logoWrap: {
     marginTop: 4,
-    color: 'white',
-    fontSize: 32,
-    fontWeight: '700',
-    letterSpacing: -0.7,
   },
   subtitle: {
     marginTop: 8,
-    color: 'rgba(255,255,255,0.92)',
-    fontSize: 13,
-    lineHeight: 19,
   },
   examples: {
     marginTop: 14,
@@ -93,13 +81,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   exampleChip: {
-    borderRadius: 12,
     borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   exampleText: {
-    fontSize: 13,
-    fontWeight: '600',
   },
 });
+

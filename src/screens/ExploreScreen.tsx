@@ -90,23 +90,22 @@ export const ExploreScreen = () => {
     <View style={styles.flex}>
       <ScrollView contentContainerStyle={styles.content}>
         <Hero
-          imageUri={imageByKey[activeTrip.coverImageKey] ?? imageByKey.default}
-          height={228}
+          imageSource={imageByKey[activeTrip.coverImageKey] ?? imageByKey.default}
           glassContent={
             <View>
               <View style={styles.liveRow}>
-                <View style={[styles.liveDot, { backgroundColor: theme.colors.accent }]} />
-                <Text style={styles.liveText}>Live</Text>
+                <View style={[styles.liveDot, { backgroundColor: theme.colors.accent, borderRadius: theme.spacing.xxs }]} />
+                <Text style={[theme.typography.heroEyebrow, styles.liveText, { color: theme.colors.onImageSecondary }]}>Live</Text>
               </View>
-              <Text style={styles.heroTitle}>You&apos;re in {currentArea}</Text>
-              <Text style={styles.heroSub}>Curated suggestions nearby</Text>
+              <Text style={[theme.typography.heroTitle, styles.heroTitle, { color: theme.colors.onImagePrimary }]}>You&apos;re in {currentArea}</Text>
+              <Text style={[theme.typography.heroSub, styles.heroSub, { color: theme.colors.onImageSecondary }]}>Curated suggestions nearby</Text>
             </View>
           }
         />
 
         <View style={styles.topActions}>
           <Pressable onPress={() => setShowAreaPicker(true)}>
-            <Text style={[styles.areaAction, { color: theme.colors.primary }]}>Area</Text>
+            <Text style={[styles.areaAction, theme.typography.button, { color: theme.colors.primary }]}>Area</Text>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -115,7 +114,7 @@ export const ExploreScreen = () => {
               (navigation as any).navigate('LifecycleTab');
             }}
           >
-            <Text style={[styles.endTrip, { color: theme.colors.textSecondary }]}>End trip</Text>
+            <Text style={[styles.endTrip, theme.typography.caption, { color: theme.colors.textSecondary }]}>End trip</Text>
           </Pressable>
         </View>
 
@@ -167,8 +166,8 @@ export const ExploreScreen = () => {
       />
 
       {toast ? (
-        <View style={[styles.toast, { backgroundColor: theme.colors.primaryStrong }]}> 
-          <Text style={styles.toastText}>{toast}</Text>
+        <View style={[styles.toast, { backgroundColor: theme.colors.primaryStrong, borderRadius: theme.spacing.s14 }]}> 
+          <Text style={[styles.toastText, theme.typography.bodyStrongSmall, { color: theme.colors.onPrimary }]}>{toast}</Text>
         </View>
       ) : null}
     </View>
@@ -192,23 +191,14 @@ const styles = StyleSheet.create({
   liveDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
   },
   liveText: {
-    color: 'rgba(255,255,255,0.95)',
-    fontSize: 12,
-    fontWeight: '700',
   },
   heroTitle: {
     marginTop: 6,
-    color: 'white',
-    fontSize: 26,
-    fontWeight: '700',
   },
   heroSub: {
     marginTop: 5,
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 13,
   },
   topActions: {
     flexDirection: 'row',
@@ -216,12 +206,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   areaAction: {
-    fontSize: 15,
-    fontWeight: '700',
   },
   endTrip: {
-    fontSize: 12,
-    fontWeight: '600',
   },
   chipsRow: {
     flexDirection: 'row',
@@ -235,13 +221,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     alignSelf: 'center',
-    borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 10,
   },
   toastText: {
-    color: '#FFF7EA',
-    fontSize: 13,
-    fontWeight: '600',
   },
 });
+

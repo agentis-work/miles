@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { PlanItineraryDay } from '../../models/plan';
 import { useTheme } from '../../theme/useTheme';
@@ -7,7 +7,7 @@ import { Card } from '../ui/Card';
 
 interface DayCardProps {
   day: PlanItineraryDay;
-  imageUri?: string;
+  imageSource?: ImageSourcePropType;
 }
 
 const Section = ({ title, items }: { title: string; items: string[] }) => {
@@ -15,9 +15,9 @@ const Section = ({ title, items }: { title: string; items: string[] }) => {
 
   return (
     <View style={styles.section}>
-      <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>{title}</Text>
+      <Text style={[styles.sectionTitle, theme.typography.bodyStrongSmall, { color: theme.colors.textPrimary }]}>{title}</Text>
       {items.slice(0, 3).map((item) => (
-        <Text key={item} style={[styles.item, { color: theme.colors.textSecondary }]}> 
+        <Text key={item} style={[styles.item, theme.typography.bodyStrongSmall, { color: theme.colors.textSecondary }]}> 
           - {item}
         </Text>
       ))}
@@ -25,12 +25,12 @@ const Section = ({ title, items }: { title: string; items: string[] }) => {
   );
 };
 
-export const DayCard = ({ day, imageUri }: DayCardProps) => {
+export const DayCard = ({ day, imageSource }: DayCardProps) => {
   const theme = useTheme();
 
   return (
     <Card style={styles.card}>
-      {imageUri ? <Image source={{ uri: imageUri }} style={styles.strip} contentFit="cover" transition={120} /> : null}
+      {imageSource ? <Image source={imageSource} style={styles.strip} contentFit="cover" transition={120} /> : null}
       <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>Day {day.dayNumber}{day.title ? ` - ${day.title}` : ''}</Text>
       <Section title="Morning" items={day.morning} />
       <Section title="Afternoon" items={day.afternoon} />
@@ -55,11 +55,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   sectionTitle: {
-    fontSize: 13,
     fontWeight: '700',
   },
   item: {
-    fontSize: 13,
     lineHeight: 18,
   },
 });

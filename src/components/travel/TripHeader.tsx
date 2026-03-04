@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Trip } from '../../models/trip';
 import { useTheme } from '../../theme/useTheme';
@@ -15,7 +15,7 @@ export const TripHeader = ({ trip }: TripHeaderProps) => {
   return (
     <View style={styles.container}>
       <Text style={[theme.typography.h1, { color: theme.colors.textPrimary }]}>{trip.destination}</Text>
-      <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>{trip.country} � {formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
+      <Text style={[styles.subtitle, theme.typography.button, { color: theme.colors.textSecondary }]}>{trip.country} • {formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
       <View style={styles.chips}>
         <Chip label={trip.status} />
         <Chip label={trip.pace} />
@@ -28,9 +28,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
   },
-  subtitle: {
-    fontSize: 15,
-  },
+  subtitle: {  },
   chips: {
     flexDirection: 'row',
     gap: 8,

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ import { useAppStore } from '../../state/AppStore';
 import { selectCurrentTrip, selectLifecycleKey } from '../../state/selectors';
 import { getLifecycleTabLabel } from './lifecycleTabs';
 import { useReducedMotion } from '../../utils/useReducedMotion';
+import { Chip } from '../../components/ui/Chip';
 
 export type RootTabParamList = {
   TripsTab: undefined;
@@ -30,43 +31,85 @@ const LifecycleTabContent = () => {
   const { state } = useAppStore();
   const lifecycleKey = selectLifecycleKey(state);
   const currentTrip = selectCurrentTrip(state);
-  const fade = useRef(new Animated.Value(1)).current;
   const prevLifecycle = useRef(lifecycleKey);
+  const currentOpacity = useRef(new Animated.Value(1)).current;
+  const previousOpacity = useRef(new Animated.Value(0)).current;
   const reducedMotion = useReducedMotion();
+  const [activeLifecycle, setActiveLifecycle] = React.useState(lifecycleKey);
+  const [previousLifecycle, setPreviousLifecycle] = React.useState<typeof lifecycleKey | null>(null);
 
-  useEffect(() => {
-    if (prevLifecycle.current !== lifecycleKey) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      prevLifecycle.current = lifecycleKey;
-      fade.setValue(reducedMotion ? 1 : 0.6);
-      Animated.timing(fade, {
-        toValue: 1,
-        duration: reducedMotion ? 0 : 220,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [fade, lifecycleKey, reducedMotion]);
-
-  const content = useMemo(() => {
-    if (lifecycleKey === 'planning') {
+  const renderLifecycleContent = (key: typeof lifecycleKey) => {
+    if (key === 'planning') {
       if (currentTrip && currentTrip.status === 'planning') {
         return <PlanOptionsScreen tripId={currentTrip.id} />;
       }
       return <PlanHomeScreen />;
     }
 
-    if (lifecycleKey === 'preparing') {
+    if (key === 'preparing') {
       return <PrepareDashboardScreen />;
     }
 
-    if (lifecycleKey === 'active') {
+    if (key === 'active') {
       return <ExploreScreen />;
     }
 
     return <ReflectScreen />;
-  }, [currentTrip, lifecycleKey]);
+  };
 
-  return <Animated.View style={[styles.flex, { opacity: fade, backgroundColor: theme.colors.background }]}>{content}</Animated.View>;
+  useEffect(() => {
+    if (prevLifecycle.current !== lifecycleKey) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setPreviousLifecycle(activeLifecycle);
+      setActiveLifecycle(lifecycleKey);
+      prevLifecycle.current = lifecycleKey;
+
+      if (reducedMotion) {
+        previousOpacity.setValue(0);
+        currentOpacity.setValue(1);
+        setPreviousLifecycle(null);
+        return;
+      }
+
+      previousOpacity.setValue(1);
+      currentOpacity.setValue(0);
+
+      Animated.parallel([
+        Animated.timing(previousOpacity, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(currentOpacity, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        setPreviousLifecycle(null);
+      });
+    }
+  }, [activeLifecycle, currentOpacity, lifecycleKey, previousOpacity, reducedMotion]);
+
+  const lifecycleLabel = useMemo(() => getLifecycleTabLabel(lifecycleKey), [lifecycleKey]);
+
+  return (
+    <View style={[styles.flex, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.lifecycleHeader, { borderBottomColor: theme.colors.cardBorder, backgroundColor: theme.colors.background }]}>
+        <Text style={[theme.typography.caption, { color: theme.colors.textSecondary }]}>Current mode</Text>
+        <Chip label={lifecycleLabel} selected />
+      </View>
+
+      <View style={styles.flex}>
+        {previousLifecycle ? (
+          <Animated.View style={[StyleSheet.absoluteFillObject, { opacity: previousOpacity }]}>
+            {renderLifecycleContent(previousLifecycle)}
+          </Animated.View>
+        ) : null}
+        <Animated.View style={[styles.flex, { opacity: currentOpacity }]}>{renderLifecycleContent(activeLifecycle)}</Animated.View>
+      </View>
+    </View>
+  );
 };
 
 export const RootTabs = () => {
@@ -99,6 +142,7 @@ export const RootTabs = () => {
       <View
         style={[
           styles.iconWrap,
+          { borderRadius: theme.spacing.sm },
           focused
             ? {
                 backgroundColor: `${theme.colors.primary}1A`,
@@ -129,13 +173,11 @@ export const RootTabs = () => {
         tabBarStyle: {
           backgroundColor: 'transparent',
           borderTopColor: `${theme.colors.cardBorder}C0`,
-          paddingTop: 8,
+          paddingTop: theme.spacing.xs,
           height: 84,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-          letterSpacing: 0.2,
+          ...theme.typography.caption,
         },
       }}
     >
@@ -174,10 +216,17 @@ const styles = StyleSheet.create({
   iconWrap: {
     minWidth: 30,
     height: 26,
-    borderRadius: 13,
     borderWidth: 1,
     borderColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  lifecycleHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
 });

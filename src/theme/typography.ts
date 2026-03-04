@@ -1,4 +1,22 @@
 export const typography = {
+  heroEyebrow: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '700' as const,
+    letterSpacing: 0.4,
+  },
+  heroTitle: {
+    fontSize: 30,
+    lineHeight: 36,
+    fontWeight: '700' as const,
+    letterSpacing: -0.6,
+  },
+  heroSub: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '600' as const,
+    letterSpacing: 0.1,
+  },
   hero: {
     fontSize: 36,
     lineHeight: 42,
@@ -34,10 +52,26 @@ export const typography = {
     lineHeight: 24,
     fontWeight: '400' as const,
   },
+  bodySmall: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '400' as const,
+  },
   bodyStrong: {
     fontSize: 16,
     lineHeight: 23,
     fontWeight: '600' as const,
+  },
+  bodyStrongSmall: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '600' as const,
+  },
+  button: {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '600' as const,
+    letterSpacing: 0.15,
   },
   caption: {
     fontSize: 12,

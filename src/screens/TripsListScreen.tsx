@@ -4,6 +4,8 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripsStackParamList } from '../app/navigation/TripsStack';
+import MilesLogo from '../components/brand/MilesLogo';
+import { WebBrandHeader } from '../components/brand/WebBrandHeader';
 import { PaywallModal } from '../components/travel/PaywallModal';
 import { Card } from '../components/ui/Card';
 import { Chip } from '../components/ui/Chip';
@@ -46,7 +48,7 @@ const TripCard = ({
     <Pressable onPress={onPress} accessibilityRole="button">
       <Card style={styles.tripCard}>
         <Image
-          source={{ uri: imageByKey[trip.coverImageKey] ?? imageByKey.default }}
+          source={imageByKey[trip.coverImageKey] ?? imageByKey.default}
           style={styles.tripImage}
           contentFit="cover"
           transition={150}
@@ -56,12 +58,12 @@ const TripCard = ({
           <View style={styles.rowBetween}>
             <View style={styles.titleWrap}>
               <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{trip.destination}</Text>
-              <Text style={[styles.country, { color: theme.colors.textSecondary }]}>{trip.country || 'Destination pending'}</Text>
+              <Text style={[styles.country, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>{trip.country || 'Destination pending'}</Text>
             </View>
             <Chip label={getStatusPillLabel(trip.status)} selected={isCurrent} />
           </View>
 
-          <Text style={[styles.dateText, { color: theme.colors.textSecondary }]}>{formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
+          <Text style={[styles.dateText, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>{formatDateRange(trip.dateStart, trip.dateEnd)}</Text>
 
           <View style={styles.metaRow}>
             <Chip label={dayCount ? `${dayCount} days` : 'Flexible dates'} />
@@ -98,15 +100,16 @@ export const TripsListScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.headerArea}>
+            <WebBrandHeader />
             <Hero
-              imageUri={heroImage}
-              height={252}
+              imageSource={heroImage}
               glassContent={
                 <>
-                  <Text style={styles.heroEyebrow}>TRAILO</Text>
-                  <Text style={styles.heroTitle}>Your intelligent travel guide</Text>
-                  <Text style={styles.heroSub}>Guiding you at every step</Text>
-                  <Text style={styles.heroHint}>
+                  <View style={styles.heroLogoWrap}>
+                    <MilesLogo variant="full" width={120} accessibilityLabel="Miles" />
+                  </View>
+                  <Text style={[theme.typography.heroSub, styles.heroSub, { color: theme.colors.onImageSecondary }]}>Your AI travel guide. Guiding you at every step.</Text>
+                  <Text style={[theme.typography.heroEyebrow, styles.heroHint, { color: theme.colors.onImageTertiary }]}>
                     Calm planning, practical preparation, confident exploration, and thoughtful reflection in one place.
                   </Text>
                 </>
@@ -120,10 +123,10 @@ export const TripsListScreen = ({ navigation }: Props) => {
                 }
                 navigation.navigate('CreateTrip');
               }}
-              style={[styles.floatingCta, { backgroundColor: theme.colors.primary }]}
+              style={[styles.floatingCta, { backgroundColor: theme.colors.primary, borderRadius: theme.spacing.md }]}
               accessibilityRole="button"
             >
-              <Text style={styles.floatingCtaText}>New Trip</Text>
+              <Text style={[styles.floatingCtaText, theme.typography.button, { color: theme.colors.onPrimary }]}>New Trip</Text>
             </Pressable>
           </View>
         }
@@ -167,35 +170,18 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 8,
   },
-  heroEyebrow: {
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-  },
-  heroTitle: {
+  heroLogoWrap: {
     marginTop: 4,
-    color: 'white',
-    fontSize: 32,
-    fontWeight: '700',
-    letterSpacing: -0.7,
   },
   heroSub: {
     marginTop: 4,
-    color: 'rgba(255,255,255,0.95)',
-    fontSize: 15,
-    fontWeight: '600',
   },
   heroHint: {
     marginTop: 8,
-    color: 'rgba(255,255,255,0.86)',
-    fontSize: 12,
-    lineHeight: 17,
   },
   floatingCta: {
     marginTop: 12,
     alignSelf: 'flex-end',
-    borderRadius: 16,
     paddingHorizontal: 18,
     paddingVertical: 12,
     shadowColor: '#092019',
@@ -205,9 +191,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   floatingCtaText: {
-    color: '#FFF7EA',
-    fontSize: 15,
-    fontWeight: '700',
   },
   tripCard: {
     padding: 0,
@@ -231,11 +214,9 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   country: {
-    fontSize: 14,
     marginTop: 2,
   },
   dateText: {
-    fontSize: 14,
   },
   metaRow: {
     flexDirection: 'row',
@@ -243,4 +224,5 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 });
+
 
