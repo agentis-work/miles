@@ -15,6 +15,7 @@ import { PaywallModal } from '../components/travel/PaywallModal';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Chip } from '../components/ui/Chip';
+import { InlineHeader } from '../components/ui/InlineHeader';
 import { coverImageKeys } from '../mock/images';
 import { Trip, TravelPace, TravelersType } from '../models/trip';
 import { useAppStore } from '../state/AppStore';
@@ -149,6 +150,7 @@ export const CreateTripScreen = ({ navigation, route }: Props) => {
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.flex, { backgroundColor: theme.colors.background }]}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+          <InlineHeader onBackPress={() => navigation.goBack()} />
           <Card>
             <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Create a new trip</Text>
             <Text style={[styles.subtitle, theme.typography.bodySmall, { color: theme.colors.textSecondary }]}>Set up your next itinerary with Miles.</Text>

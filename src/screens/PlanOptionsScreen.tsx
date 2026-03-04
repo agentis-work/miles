@@ -17,6 +17,7 @@ import { OptionCard } from '../components/travel/OptionCard';
 import { Button } from '../components/ui/Button';
 import { Chip } from '../components/ui/Chip';
 import { Hero } from '../components/ui/Hero';
+import { InlineHeader } from '../components/ui/InlineHeader';
 import { imageByKey } from '../mock/images';
 import { getPlanOptionsForTrip, getRefinedPlanOptions, PlanBudget } from '../mock/aiMocks';
 import { PlanOption } from '../models/plan';
@@ -194,6 +195,7 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
             </View>
           }
         />
+        <InlineHeader onBackPress={() => (navigation as any).goBack()} />
 
         <View style={styles.titleWrap}>
           <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Choose your plan</Text>

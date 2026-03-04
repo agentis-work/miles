@@ -25,12 +25,7 @@ export const TripsStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerLargeTitle: true,
-        headerStyle: { backgroundColor: 'transparent' },
-        headerTransparent: true,
-        headerBlurEffect: 'systemMaterial',
-        headerTintColor: theme.colors.textPrimary,
-        headerShadowVisible: false,
+        headerShown: false,
         contentStyle: { backgroundColor: theme.colors.background },
       }}
     >

@@ -1,7 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import MilesLogo from '../components/brand/MilesLogo';
 import { Hero } from '../components/ui/Hero';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -21,9 +20,6 @@ export const PlanHomeScreen = () => {
         imageSource={imageByKey.default}
         glassContent={
           <>
-            <View style={styles.logoWrap}>
-              <MilesLogo variant="full" width={120} accessibilityLabel="Miles" />
-            </View>
             <Text style={[theme.typography.heroSub, styles.subtitle, { color: theme.colors.onImageSecondary }]}>Your AI travel guide. Plan your next trip with calm, high-level guidance tailored to your pace and priorities.</Text>
           </>
         }
@@ -68,9 +64,6 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  logoWrap: {
-    marginTop: 4,
-  },
   subtitle: {
     marginTop: 8,
   },
@@ -85,7 +78,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  exampleText: {
-  },
+  exampleText: {},
 });
-

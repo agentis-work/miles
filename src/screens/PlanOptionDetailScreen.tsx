@@ -7,6 +7,7 @@ import { DayCard } from '../components/travel/DayCard';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Hero } from '../components/ui/Hero';
+import { InlineHeader } from '../components/ui/InlineHeader';
 import { imageByKey } from '../mock/images';
 import { getPlanOptionById } from '../mock/aiMocks';
 import { useAppStore } from '../state/AppStore';
@@ -73,6 +74,7 @@ export const PlanOptionDetailScreen = ({ route, navigation }: Props) => {
           subtitle={formatDateRange(trip.dateStart, trip.dateEnd)}
           helperText={option.summary}
         />
+        <InlineHeader onBackPress={() => navigation.goBack()} />
 
         <Card>
           <Text style={[theme.typography.h3, { color: theme.colors.textPrimary }]}>{option.title}</Text>

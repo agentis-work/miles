@@ -4,7 +4,6 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripsStackParamList } from '../app/navigation/TripsStack';
-import MilesLogo from '../components/brand/MilesLogo';
 import { WebBrandHeader } from '../components/brand/WebBrandHeader';
 import { PaywallModal } from '../components/travel/PaywallModal';
 import { Card } from '../components/ui/Card';
@@ -105,9 +104,6 @@ export const TripsListScreen = ({ navigation }: Props) => {
               imageSource={heroImage}
               glassContent={
                 <>
-                  <View style={styles.heroLogoWrap}>
-                    <MilesLogo variant="full" width={120} accessibilityLabel="Miles" />
-                  </View>
                   <Text style={[theme.typography.heroSub, styles.heroSub, { color: theme.colors.onImageSecondary }]}>Your AI travel guide. Guiding you at every step.</Text>
                   <Text style={[theme.typography.heroEyebrow, styles.heroHint, { color: theme.colors.onImageTertiary }]}>
                     Calm planning, practical preparation, confident exploration, and thoughtful reflection in one place.
@@ -115,19 +111,22 @@ export const TripsListScreen = ({ navigation }: Props) => {
                 </>
               }
             />
-            <Pressable
-              onPress={() => {
-                if (!canCreateTrip) {
-                  setShowPaywall(true);
-                  return;
-                }
-                navigation.navigate('CreateTrip');
-              }}
-              style={[styles.floatingCta, { backgroundColor: theme.colors.primary, borderRadius: theme.spacing.md }]}
-              accessibilityRole="button"
-            >
-              <Text style={[styles.floatingCtaText, theme.typography.button, { color: theme.colors.onPrimary }]}>New Trip</Text>
-            </Pressable>
+            <View style={styles.tripsRow}>
+              <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Trips</Text>
+              <Pressable
+                onPress={() => {
+                  if (!canCreateTrip) {
+                    setShowPaywall(true);
+                    return;
+                  }
+                  navigation.navigate('CreateTrip');
+                }}
+                style={[styles.floatingCta, { backgroundColor: theme.colors.primary, borderRadius: theme.spacing.md }]}
+                accessibilityRole="button"
+              >
+                <Text style={[styles.floatingCtaText, theme.typography.button, { color: theme.colors.onPrimary }]}>New Trip</Text>
+              </Pressable>
+            </View>
           </View>
         }
         renderItem={({ item }) => (
@@ -170,18 +169,19 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 8,
   },
-  heroLogoWrap: {
-    marginTop: 4,
-  },
   heroSub: {
     marginTop: 4,
   },
   heroHint: {
     marginTop: 8,
   },
+  tripsRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   floatingCta: {
-    marginTop: 12,
-    alignSelf: 'flex-end',
     paddingHorizontal: 18,
     paddingVertical: 12,
     shadowColor: '#092019',

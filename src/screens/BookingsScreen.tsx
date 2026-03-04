@@ -5,15 +5,17 @@ import { TripsStackParamList } from '../app/navigation/TripsStack';
 import { useAppStore } from '../state/AppStore';
 import { BookingCard } from '../components/travel/BookingCard';
 import { EmptyState } from '../components/ui/EmptyState';
+import { InlineHeader } from '../components/ui/InlineHeader';
 
 type Props = NativeStackScreenProps<TripsStackParamList, 'Bookings'>;
 
-export const BookingsScreen = ({ route }: Props) => {
+export const BookingsScreen = ({ route, navigation }: Props) => {
   const { state } = useAppStore();
   const bookings = state.bookings.filter((item) => item.tripId === route.params.tripId);
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
+      <InlineHeader onBackPress={() => navigation.goBack()} />
       {bookings.length === 0 ? (
         <EmptyState title="No bookings yet" description="Add flights and stays in a later setup step." />
       ) : (

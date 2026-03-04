@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import Svg, { Path, G } from 'react-native-svg';
-import { useTheme } from '../../theme/useTheme';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import MilesLogo from './MilesLogo';
 
 type BrandSizePreset = 'sm' | 'md' | 'lg';
 type BrandVariant = 'full' | 'mark';
@@ -25,63 +24,27 @@ const aspectByVariant: Record<BrandVariant, number> = {
   mark: 240 / 120,
 };
 
-const resolveSize = (size: number | BrandSizePreset | undefined) => {
+const resolveHeight = (size: number | BrandSizePreset | undefined) => {
   if (typeof size === 'number') {
     return size;
   }
   return sizeByPreset[size ?? 'md'];
 };
 
-const resolveToneColor = (tone: BrandTone, theme: ReturnType<typeof useTheme>) => {
-  if (tone === 'light') {
-    return theme.colors.onImagePrimary;
-  }
-  if (tone === 'dark') {
-    return theme.colors.textPrimary;
-  }
-  return theme.colors.textPrimary;
+const toneToTheme = (tone: BrandTone): 'auto' | 'light' | 'dark' => {
+  if (tone === 'light') return 'dark';
+  if (tone === 'dark') return 'light';
+  return 'auto';
 };
 
-const FullLockupPaths = ({ color }: { color: string }) => (
-  <G fill={color}>
-    <Path d="M40 210L82 122H126L168 210L204 122H248L290 210L264 220L232 140H220L182 228H164L126 140H114L82 220Z" />
-    <Path d="M336 210V130H362V210Z" />
-    <Path d="M336 114V88H362V114Z" />
-    <Path d="M392 210V88H418V210Z" />
-    <Path d="M458 173C458 146 476 130 504 130H550V154H508C495 154 486 160 484 173H550V190H484C486 202 495 208 508 208H550V210H506C477 210 458 194 458 173Z" />
-    <Path d="M582 210V188H648C658 188 664 184 664 178C664 171 658 167 648 167H618C593 167 576 154 576 132C576 108 596 92 626 92H692V114H628C616 114 608 118 608 126C608 132 613 136 623 136H653C680 136 696 149 696 171C696 195 678 210 648 210Z" />
-    <Path d="M722 106C729 89 744 80 761 80C774 80 786 86 793 95L809 88L816 102L801 110C802 114 802 118 801 122L834 138L826 154L796 140C789 153 775 162 760 162C739 162 721 146 718 124L702 122L705 106Z" />
-    <Path d="M806 124C821 116 841 121 850 136L874 130L878 146L858 152C858 170 844 186 825 186C806 186 791 170 791 151C791 138 797 129 806 124Z" />
-    <Path d="M760 98H810L814 112H756Z" />
-    <Path d="M58 236C196 198 344 184 492 188C630 191 766 220 908 236L896 256C760 238 626 212 492 208C348 204 204 218 66 256Z" opacity={0.28} />
-    <Path d="M74 226C220 186 352 170 500 172C642 174 782 198 924 226L914 242C774 212 638 192 500 190C356 188 226 202 86 242Z" opacity={0.46} />
-  </G>
-);
-
-const MarkPaths = ({ color }: { color: string }) => (
-  <G fill={color}>
-    <Path d="M22 100L52 36H84L114 100L140 36H172L202 100L182 108L158 52H148L120 114H108L80 52H66L42 108Z" />
-    <Path d="M188 108L210 86L220 96L198 118Z" opacity={0.78} />
-  </G>
-);
-
 const BrandMark = ({ size = 'md', variant = 'full', tone = 'auto', style }: BrandMarkProps) => {
-  const theme = useTheme();
-  const height = resolveSize(size);
+  const height = resolveHeight(size);
   const width = Math.round(height * aspectByVariant[variant]);
-  const color = resolveToneColor(tone, theme);
 
   return (
-    <Svg
-      width={width}
-      height={height}
-      viewBox={variant === 'full' ? '0 0 980 260' : '0 0 240 120'}
-      style={style}
-      accessibilityRole="image"
-      aria-label="Miles brand mark"
-    >
-      {variant === 'full' ? <FullLockupPaths color={color} /> : <MarkPaths color={color} />}
-    </Svg>
+    <View style={style}>
+      <MilesLogo variant={variant} width={width} theme={toneToTheme(tone)} accessibilityLabel="Miles brand mark" />
+    </View>
   );
 };
 

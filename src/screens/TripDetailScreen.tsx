@@ -3,6 +3,7 @@ import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripsStackParamList } from '../app/navigation/TripsStack';
 import { Hero } from '../components/ui/Hero';
+import { InlineHeader } from '../components/ui/InlineHeader';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Chip } from '../components/ui/Chip';
@@ -65,6 +66,7 @@ export const TripDetailScreen = ({ route, navigation }: Props) => {
         subtitle={formatDateRange(trip.dateStart, trip.dateEnd)}
         helperText={nextStepByStatus[trip.status]}
       />
+      <InlineHeader onBackPress={() => navigation.goBack()} />
 
       <Card>
         <View style={styles.rowBetween}>

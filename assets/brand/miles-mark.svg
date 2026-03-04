@@ -1,7 +1,0 @@
-<svg width="240" height="120" viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Miles mark">
-  <g fill="currentColor">
-    <path d="M22 100L52 36H84L114 100L140 36H172L202 100L182 108L158 52H148L120 114H108L80 52H66L42 108Z" />
-    <path d="M34 108C66 98 98 94 132 95C162 96 190 101 220 108L214 118C186 111 160 106 132 106C100 105 70 109 40 118Z" opacity="0.38" />
-    <path d="M42 101C71 92 101 88 133 89C162 90 192 95 220 101L216 109C188 102 160 98 133 98C102 97 74 101 46 109Z" opacity="0.56" />
-  </g>
-</svg>

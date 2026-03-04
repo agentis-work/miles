@@ -3,7 +3,6 @@ import { ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
-import BrandMark from '../brand/BrandMark';
 import { useTheme } from '../../theme/useTheme';
 import { fallbackCoverImage } from '../../assets/coverImages';
 
@@ -31,11 +30,6 @@ export const Hero = ({ imageSource, title, subtitle, helperText, glow = true, gl
         </>
       ) : null}
       <LinearGradient colors={[`${theme.colors.primaryStrong}00`, `${theme.colors.primaryStrong}CC`]} style={styles.overlay} />
-      <View style={[styles.brandTop, { top: theme.spacing.s14, left: theme.spacing.s14 }]} pointerEvents="none">
-        <View style={styles.brandGhost}>
-          <BrandMark size="sm" variant="full" tone="light" />
-        </View>
-      </View>
       <BlurView
         intensity={22}
         tint="light"
@@ -87,12 +81,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     overflow: 'hidden',
     backgroundColor: 'rgba(255,255,255,0.2)',
-  },
-  brandTop: {
-    position: 'absolute',
-  },
-  brandGhost: {
-    opacity: 0.68,
   },
   title: {
   },
