@@ -12,10 +12,10 @@ interface MilesLogoProps {
 }
 
 // Derived from generated PNG metadata in assets/brand/png:
-// full: ~3.8, mark: 1
+// full: ~2.25147, mark: ~1.67686
 const ASPECT_RATIO: Record<MilesLogoVariant, number> = {
-  full: 3.8,
-  mark: 1,
+  full: 2.25147347740668,
+  mark: 1.6768558951965065,
 };
 
 const lightAssets: Record<MilesLogoVariant, ImageSourcePropType> = {

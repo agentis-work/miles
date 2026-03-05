@@ -4,8 +4,9 @@ This app now uses PNG assets for all Miles branding in-app. No SVG runtime/logo 
 
 ## Source Inputs
 
-- `source/miles-logo.png` (required)
-- `source/miles-mark.png` (optional; auto-cropped from full logo if missing)
+- `miles-logo-transparent.png` (required full logo source)
+- `miles-mark-transparent.png` (required mark source)
+- `miles-logo-background.png` (required background lockup source for splash generation)
 - `source/miles-logo-dark.png` (optional manual dark variant)
 - `source/miles-mark-dark.png` (optional manual dark variant)
 
@@ -25,6 +26,14 @@ This app now uses PNG assets for all Miles branding in-app. No SVG runtime/logo 
 - `png/miles-mark-dark@3x.png`
 
 If dark source files are not provided and automatic recolor is not safe (multi-color logo), fallback dark files are copied from light variants and a note is written to `PNG_NOTES.md`.
+
+## Generated Web Icons
+
+- `favicon/android-chrome-512.png`
+- `favicon/android-chrome-192.png`
+- `favicon/apple-touch-icon.png`
+- `favicon/favicon-32.png`
+- `favicon/favicon-16.png`
 
 ## Existing App Config PNGs (unchanged)
 

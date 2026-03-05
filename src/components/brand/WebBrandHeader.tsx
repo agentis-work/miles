@@ -12,9 +12,7 @@ export const WebBrandHeader = () => {
 
   return (
     <View style={[styles.container, { borderBottomColor: theme.colors.cardBorder, backgroundColor: theme.colors.background }]}>
-      <View style={styles.logoViewport}>
-        <MilesLogo variant="full" width={320} accessibilityLabel="Miles" />
-      </View>
+      <MilesLogo variant="full" width={320} accessibilityLabel="Miles" />
     </View>
   );
 };
@@ -27,12 +25,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
-  },
-  logoViewport: {
-    width: 236,
-    height: 48,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

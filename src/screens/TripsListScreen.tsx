@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripsStackParamList } from '../app/navigation/TripsStack';
-import { WebBrandHeader } from '../components/brand/WebBrandHeader';
+import { MilesWordmarkHeader } from '../components/brand/MilesWordmarkHeader';
 import { PaywallModal } from '../components/travel/PaywallModal';
 import { Card } from '../components/ui/Card';
 import { Chip } from '../components/ui/Chip';
@@ -99,20 +99,22 @@ export const TripsListScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.headerArea}>
-            <WebBrandHeader />
-            <Hero
-              imageSource={heroImage}
-              glassContent={
-                <>
-                  <Text style={[theme.typography.heroSub, styles.heroSub, { color: theme.colors.onImageSecondary }]}>Your AI travel guide. Guiding you at every step.</Text>
-                  <Text style={[theme.typography.heroEyebrow, styles.heroHint, { color: theme.colors.onImageTertiary }]}>
-                    Calm planning, practical preparation, confident exploration, and thoughtful reflection in one place.
-                  </Text>
-                </>
-              }
-            />
+            <MilesWordmarkHeader />
+            <View style={styles.hero}>
+              <Hero
+                imageSource={heroImage}
+                glassContent={
+                  <>
+                    <Text style={[theme.typography.heroSub, styles.heroSub, { color: theme.colors.onImageSecondary }]}>Your AI travel guide.</Text>
+                    <Text style={[theme.typography.heroEyebrow, styles.heroHint, { color: theme.colors.onImageTertiary }]}>
+                      Calm planning, practical preparation, confident exploration, and thoughtful reflection in one place.
+                    </Text>
+                  </>
+                }
+              />
+            </View>
             <View style={styles.tripsRow}>
-              <Text style={[theme.typography.h2, { color: theme.colors.textPrimary }]}>Trips</Text>
+              <Text style={[theme.typography.bodyStrong, { color: theme.colors.textPrimary }]}>Your Trips</Text>
               <Pressable
                 onPress={() => {
                   if (!canCreateTrip) {
@@ -162,18 +164,22 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 16,
+    paddingTop: 0,
     paddingBottom: 120,
     gap: 12,
   },
   headerArea: {
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: 0,
+    marginBottom: 4,
+  },
+  hero: {
+    marginTop: 12,
   },
   heroSub: {
-    marginTop: 4,
+    marginTop: 2,
   },
   heroHint: {
-    marginTop: 8,
+    marginTop: 6,
   },
   tripsRow: {
     marginTop: 10,

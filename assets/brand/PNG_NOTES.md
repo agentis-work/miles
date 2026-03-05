@@ -1,9 +1,10 @@
 # Brand PNG Notes
 
-- Full logo source: `assets/brand/source/miles-logo.png`
-- Mark source: `assets/brand/source/miles-mark.png`
-- Full logo aspect ratio: `3.794702`
-- Mark aspect ratio: `1.000000`
+- Full logo source: `assets/brand/miles-logo-transparent.png`
+- Mark source: `assets/brand/miles-mark-transparent.png`
+- Background lockup source: `assets/brand/miles-logo-background.png`
+- Full logo aspect ratio: `2.251473`
+- Mark aspect ratio: `1.676856`
 
 ## Dark Assets
 

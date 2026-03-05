@@ -4,23 +4,45 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const root = process.cwd();
-const sourceDir = path.join(root, 'assets', 'brand', 'source');
-const outputDir = path.join(root, 'assets', 'brand', 'png');
+const brandDir = path.join(root, 'assets', 'brand');
+const sourceDir = path.join(brandDir, 'source');
+const outputDir = path.join(brandDir, 'png');
+const faviconDir = path.join(brandDir, 'favicon');
+
+const sourceLogoMaster = path.join(brandDir, 'miles-logo-transparent.png');
+const sourceMarkMaster = path.join(brandDir, 'miles-mark-transparent.png');
+const sourceBackgroundMaster = path.join(brandDir, 'miles-logo-background.png');
+
 const sourceLogo = path.join(sourceDir, 'miles-logo.png');
 const sourceMark = path.join(sourceDir, 'miles-mark.png');
 const sourceLogoDark = path.join(sourceDir, 'miles-logo-dark.png');
 const sourceMarkDark = path.join(sourceDir, 'miles-mark-dark.png');
-const notesPath = path.join(root, 'assets', 'brand', 'PNG_NOTES.md');
+
+const notesPath = path.join(brandDir, 'PNG_NOTES.md');
 
 const FULL_WIDTHS = [360, 720, 1080];
 const MARK_WIDTHS = [96, 192, 288];
-const FULL_TARGET_ASPECT = 3.8;
-const MARK_TARGET_ASPECT = 1;
 const LIGHT_NEUTRAL = { r: 245, g: 247, b: 250 };
+const APP_ICON_BG = '#0B1220';
 
-const ensureSourceLogo = () => {
-  if (!existsSync(sourceLogo)) {
-    throw new Error(`Missing required source logo: ${sourceLogo}\nAdd assets/brand/source/miles-logo.png.`);
+const TRANSPARENT_BG = { r: 0, g: 0, b: 0, alpha: 0 };
+const FAVICON_SPECS = [
+  { name: 'android-chrome-512.png', width: 512 },
+  { name: 'android-chrome-192.png', width: 192 },
+  { name: 'apple-touch-icon.png', width: 180 },
+  { name: 'favicon-32.png', width: 32 },
+  { name: 'favicon-16.png', width: 16 },
+];
+
+const ensureSources = () => {
+  if (!existsSync(sourceLogoMaster)) {
+    throw new Error(`Missing required source logo: ${sourceLogoMaster}`);
+  }
+  if (!existsSync(sourceMarkMaster)) {
+    throw new Error(`Missing required source mark: ${sourceMarkMaster}`);
+  }
+  if (!existsSync(sourceBackgroundMaster)) {
+    throw new Error(`Missing required background logo: ${sourceBackgroundMaster}`);
   }
 };
 
@@ -29,30 +51,6 @@ const dist = (r1, g1, b1, r2, g2, b2) => {
   const dg = g1 - g2;
   const db = b1 - b2;
   return Math.sqrt(dr * dr + dg * dg + db * db);
-};
-
-const cropToAspect = async (inputBuffer, targetAspect) => {
-  const meta = await sharp(inputBuffer).metadata();
-  const width = meta.width ?? 0;
-  const height = meta.height ?? 0;
-  if (!width || !height) {
-    throw new Error('Cannot crop image with invalid metadata');
-  }
-
-  const currentAspect = width / height;
-  if (Math.abs(currentAspect - targetAspect) < 0.02) {
-    return inputBuffer;
-  }
-
-  if (currentAspect < targetAspect) {
-    const cropHeight = Math.max(1, Math.round(width / targetAspect));
-    const top = Math.max(0, Math.round((height - cropHeight) / 2));
-    return sharp(inputBuffer).extract({ left: 0, top, width, height: cropHeight }).png().toBuffer();
-  }
-
-  const cropWidth = Math.max(1, Math.round(height * targetAspect));
-  const left = Math.max(0, Math.round((width - cropWidth) / 2));
-  return sharp(inputBuffer).extract({ left, top: 0, width: cropWidth, height }).png().toBuffer();
 };
 
 const normalizeTransparent = async (inputPath) => {
@@ -128,6 +126,34 @@ const renderVariants = async ({ sourcePath, baseName, widths }) => {
   return { aspectRatio, width: metadata.width ?? 0, height: metadata.height ?? 0 };
 };
 
+const cleanGeneratedFiles = async () => {
+  const targets = [
+    'miles-logo.png',
+    'miles-logo@2x.png',
+    'miles-logo@3x.png',
+    'miles-logo-dark.png',
+    'miles-logo-dark@2x.png',
+    'miles-logo-dark@3x.png',
+    'miles-mark.png',
+    'miles-mark@2x.png',
+    'miles-mark@3x.png',
+    'miles-mark-dark.png',
+    'miles-mark-dark@2x.png',
+    'miles-mark-dark@3x.png',
+    'app-icon-1024.png',
+    'adaptive-foreground-432.png',
+    'splash-2732.png',
+  ];
+
+  for (const name of targets) {
+    await rm(path.join(outputDir, name), { force: true });
+  }
+
+  for (const icon of FAVICON_SPECS) {
+    await rm(path.join(faviconDir, icon.name), { force: true });
+  }
+};
+
 const isSingleColor = async (sourcePath) => {
   const { data } = await sharp(sourcePath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const colors = new Set();
@@ -179,11 +205,97 @@ const maybeGenerateDarkSet = async ({ sourcePath, darkSourcePath, baseName, widt
   return 'generated';
 };
 
+const generateAppIcon = async () => {
+  const mark = await sharp(sourceMark).trim({ threshold: 8 }).png().toBuffer();
+  const meta = await sharp(mark).metadata();
+  const logoSize = Math.round(1024 * 0.56);
+  const left = Math.round((1024 - logoSize) / 2);
+  const top = Math.round((1024 - logoSize) / 2);
+
+  await sharp({
+    create: {
+      width: 1024,
+      height: 1024,
+      channels: 4,
+      background: APP_ICON_BG,
+    },
+  })
+    .composite([
+      {
+        input: await sharp(mark)
+          .resize({
+            width: Math.min(logoSize, meta.width ?? logoSize),
+            height: Math.min(logoSize, meta.height ?? logoSize),
+            fit: 'contain',
+          })
+          .png()
+          .toBuffer(),
+        left,
+        top,
+      },
+    ])
+    .png()
+    .toFile(path.join(outputDir, 'app-icon-1024.png'));
+};
+
+const generateAdaptiveForeground = async () => {
+  await sharp(sourceMark)
+    .trim({ threshold: 8 })
+    .resize({ width: 280, height: 280, fit: 'contain' })
+    .extend({
+      top: 76,
+      bottom: 76,
+      left: 76,
+      right: 76,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toFile(path.join(outputDir, 'adaptive-foreground-432.png'));
+};
+
+const generateSplash = async () => {
+  await sharp(sourceBackgroundMaster)
+    .resize({ width: 2732, height: 2732, fit: 'contain', background: { r: 11, g: 18, b: 32, alpha: 1 } })
+    .png()
+    .toFile(path.join(outputDir, 'splash-2732.png'));
+};
+
+const generateFavicons = async () => {
+  const mark = await sharp(sourceMarkMaster)
+    .ensureAlpha()
+    .trim({ threshold: 8 })
+    .png()
+    .toBuffer();
+
+  for (const icon of FAVICON_SPECS) {
+    const glyph = Math.max(1, Math.round(icon.width * 0.72));
+    const glyphBuffer = await sharp(mark).resize({ width: glyph, height: glyph, fit: 'contain' }).png().toBuffer();
+    const glyphMeta = await sharp(glyphBuffer).metadata();
+    const glyphWidth = glyphMeta.width ?? glyph;
+    const glyphHeight = glyphMeta.height ?? glyph;
+    const left = Math.floor((icon.width - glyphWidth) / 2);
+    const top = Math.floor((icon.width - glyphHeight) / 2);
+
+    await sharp({
+      create: {
+        width: icon.width,
+        height: icon.width,
+        channels: 4,
+        background: TRANSPARENT_BG,
+      },
+    })
+      .composite([{ input: glyphBuffer, left, top }])
+      .png()
+      .toFile(path.join(faviconDir, icon.name));
+  }
+};
+
 const writeNotes = async ({ fullDarkStatus, markDarkStatus, fullAspect, markAspect }) => {
   const note = `# Brand PNG Notes
 
-- Full logo source: \`assets/brand/source/miles-logo.png\`
-- Mark source: \`assets/brand/source/miles-mark.png\`
+- Full logo source: \`assets/brand/miles-logo-transparent.png\`
+- Mark source: \`assets/brand/miles-mark-transparent.png\`
+- Background lockup source: \`assets/brand/miles-logo-background.png\`
 - Full logo aspect ratio: \`${fullAspect.toFixed(6)}\`
 - Mark aspect ratio: \`${markAspect.toFixed(6)}\`
 
@@ -200,20 +312,24 @@ If a status is \`manual-required\`, provide manual dark PNGs at:
 };
 
 const main = async () => {
-  ensureSourceLogo();
+  ensureSources();
   await mkdir(outputDir, { recursive: true });
+  await mkdir(faviconDir, { recursive: true });
+  await mkdir(sourceDir, { recursive: true });
+  await cleanGeneratedFiles();
+
+  await copyFile(sourceLogoMaster, sourceLogo);
+  await copyFile(sourceMarkMaster, sourceMark);
 
   if (!existsSync(sourceMark)) {
     await buildMarkFromLogo();
   }
 
   const logoPrepared = await normalizeTransparent(sourceLogo);
-  const logoCropped = await cropToAspect(logoPrepared, FULL_TARGET_ASPECT);
-  await writeFile(sourceLogo, logoCropped);
+  await writeFile(sourceLogo, logoPrepared);
 
   const markPrepared = await normalizeTransparent(sourceMark);
-  const markCropped = await cropToAspect(markPrepared, MARK_TARGET_ASPECT);
-  await writeFile(sourceMark, markCropped);
+  await writeFile(sourceMark, markPrepared);
 
   const fullMeta = await renderVariants({ sourcePath: sourceLogo, baseName: 'miles-logo', widths: FULL_WIDTHS });
   const markMeta = await renderVariants({ sourcePath: sourceMark, baseName: 'miles-mark', widths: MARK_WIDTHS });
@@ -230,6 +346,11 @@ const main = async () => {
     baseName: 'miles-mark',
     widths: MARK_WIDTHS,
   });
+
+  await generateAppIcon();
+  await generateAdaptiveForeground();
+  await generateSplash();
+  await generateFavicons();
 
   await writeNotes({
     fullDarkStatus,
