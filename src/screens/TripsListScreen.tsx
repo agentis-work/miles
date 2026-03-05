@@ -138,7 +138,13 @@ export const TripsListScreen = ({ navigation }: Props) => {
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               selectTrip(item.id);
-              navigation.navigate('TripDetail', { tripId: item.id });
+              navigation.navigate('TripTimeline', {
+                tripId: item.id,
+                destination: item.destination,
+                startISO: item.dateStart,
+                endISO: item.dateEnd,
+                country: item.country,
+              });
             }}
           />
         )}

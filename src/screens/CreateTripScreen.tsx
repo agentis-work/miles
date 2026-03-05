@@ -143,7 +143,13 @@ export const CreateTripScreen = ({ navigation, route }: Props) => {
     };
 
     createTrip(newTrip);
-    navigation.replace('TripDetail', { tripId: newTrip.id });
+    navigation.replace('TripTimeline', {
+      tripId: newTrip.id,
+      destination: newTrip.destination,
+      startISO: newTrip.dateStart,
+      endISO: newTrip.dateEnd,
+      country: newTrip.country,
+    });
   };
 
   return (
