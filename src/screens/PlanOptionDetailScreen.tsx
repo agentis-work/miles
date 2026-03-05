@@ -62,13 +62,7 @@ export const PlanOptionDetailScreen = ({ route, navigation }: Props) => {
   const selectPlan = () => {
     selectTrip(trip.id);
     selectPlanForTrip(trip.id, option.id);
-    navigation.replace('TripTimeline', {
-      tripId: trip.id,
-      destination: trip.destination,
-      startISO: trip.dateStart,
-      endISO: trip.dateEnd,
-      country: trip.country,
-    });
+    navigation.replace('TripDetail', { tripId: trip.id });
   };
 
   return (

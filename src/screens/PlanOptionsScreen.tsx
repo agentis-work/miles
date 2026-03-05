@@ -253,16 +253,7 @@ export const PlanOptionsScreen = ({ tripId, route }: PlanOptionsProps) => {
             label="Select plan"
             onPress={() => {
               selectPlanForTrip(trip.id, selectedOption.id);
-              (navigation as any).navigate('TripsTab', {
-                screen: 'TripTimeline',
-                params: {
-                  tripId: trip.id,
-                  destination: trip.destination,
-                  startISO: trip.dateStart,
-                  endISO: trip.dateEnd,
-                  country: trip.country,
-                },
-              });
+              (navigation as any).navigate('TripsTab', { screen: 'TripDetail', params: { tripId: trip.id } });
             }}
           />
         </View>
